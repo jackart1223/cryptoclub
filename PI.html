@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Network Staking Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+        }
+        .staking-card {
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .progress-bar {
+            background-color: #6e8efb;
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+    <div class="container py-5">
+        <!-- Login/Signup Modal -->
+        <div class="modal fade" id="authModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="authModalLabel">Access Your Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs" id="authTabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#signup">Sign Up</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content py-3">
+                            <div class="tab-pane fade show active" id="login">
+                                <form id="loginForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Pi Username</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="signup">
+                                <form id="signupForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Pi Username</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Pi Wallet Address</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Create Account</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card staking-card">
+                    <div class="card-header bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Pi Network Staking</h4>
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#authModal">
+                                <i class="bi bi-person-circle"></i> Login
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Staking Details</h5>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Minimum Stake:</span>
+                                                <span>10 π</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Maximum Stake:</span>
+                                                <span>100 π</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Staking Period:</span>
+                                                <span>11-31 Days</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Total Reward:</span>
+                                                <span>100%</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Active Stakers:</span>
+                                                <span id="activeStakers">1900</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Stake Pi</h5>
+                                        <form id="stakeForm">
+                                            <div class="mb-3">
+                                                <label class="form-label">Amount (π)</label>
+                                                <input type="number" class="form-control" id="stakeAmount" min="10" max="100" required>
+                                                <div class="form-text">Between 10-100 π</div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Duration (Days)</label>
+                                                <input type="number" class="form-control" id="stakeDuration" min="11" max="31" required>
+                                                <div class="form-text">Between 11-31 days</div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Sender Address</label>
+                                                <input type="text" class="form-control" id="senderAddress" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Recipient Address</label>
+                                                <input type="text" class="form-control" id="recipientAddress" 
+                                                    value="GD3ZYP2B2MA5AL5XYREPH6BUXF3KZI2TUGG2BZ4LYB4F5YVW7AFMV25J" readonly>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100">Stake Now</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Your Active Stakes</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Amount</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Progress</th>
+                                                <th>Estimated Reward</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="stakesTable">
+                                            <!-- Dynamic content will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script>
+        // Connect to Pi Network blockchain (placeholder for actual integration)
+        const connectPiNetwork = async () => {
+            try {
+                if (window.piNetwork) {
+                    await window.piNetwork.enable();
+                    const web3 = new Web3(window.piNetwork);
+                    return web3;
+                } else {
+                    throw new Error("Pi Network extension not detected");
+                }
+            } catch (error) {
+                console.error("Error connecting to Pi Network:", error);
+                alert("Please install the Pi Network browser extension to use this app");
+                return null;
+            }
+        };
+        
+        // Stake form submission
+        document.getElementById('stakeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('stakeAmount').value);
+            const duration = parseInt(document.getElementById('stakeDuration').value);
+            const senderAddress = document.getElementById('senderAddress').value;
+            const recipientAddress = document.getElementById('recipientAddress').value;
+            
+            if (amount < 10 || amount > 100) {
+                alert("Stake amount must be between 10-100 π");
+                return;
+            }
+            
+            if (duration < 11 || duration > 31) {
+                alert("Stake duration must be between 11-31 days");
+                return;
+            }
+            
+            // In a real implementation, this would interact with the smart contract
+            alert(`Staking ${amount} π for ${duration} days from ${senderAddress} to ${recipientAddress}`);
+            
+            // Here you would typically:
+            // 1. Validate addresses
+            // 2. Connect to wallet
+            // 3. Send transaction to smart contract
+            // 4. Update UI with new stake
+        });
+        
+        // Sample data for demonstration
+        const sampleStakes = [
+            { amount: 50, startDate: '2023-06-01', endDate: '2023-07-01', progress: 65, reward: 32.5 },
+            { amount: 25, startDate: '2023-06-10', endDate: '2023-06-30', progress: 30, reward: 7.5 }
+        ];
+        
+        // Render stakes table
+        function renderStakesTable() {
+            const tableBody = document.getElementById('stakesTable');
+            tableBody.innerHTML = '';
+            
+            sampleStakes.forEach(stake => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${stake.amount} π</td>
+                    <td>${stake.startDate}</td>
+                    <td>${stake.endDate}</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: ${stake.progress}%"></div>
+                        </div>
+                        ${stake.progress}%
+                    </td>
+                    <td>${stake.reward} π</td>
+                    <td>
+                        ${stake.progress < 100 ? 
+                            '<button class="btn btn-sm btn-outline-secondary" disabled>Withdraw</button>' : 
+                            '<button class="btn btn-sm btn-success">Withdraw</button>'}
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStakesTable();
+            
+            // Check if user is logged in (in a real app, this would check session/cookies)
+            const isLoggedIn = false; // Change to true after login
+            
+            if (!isLoggedIn) {
+                const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+                authModal.show();
+            }
+        });
+    </script>
+</body>
+</html>
