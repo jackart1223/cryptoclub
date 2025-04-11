@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Network Staking Platform</title>
+    <style>
+        :root {
+            --primary: #2b73b7;
+            --secondary: #f8f9fa;
+            --accent: #ff9500;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-menu a {
+            color: var(--dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .sidebar-menu i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        
+        .card-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #1a5a8f;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+        }
+        
+        .btn-accent:hover {
+            background-color: #e68a00;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .stake-history {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .stake-history th, .stake-history td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stake-history th {
+            background-color: #f8f9fa;
+            font-weight: 500;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #d4edda;
+            color: var(--success);
+        }
+        
+        .status-completed {
+            background-color: #fff3cd;
+            color: #ffc107;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 5rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+        }
+        
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .alert {
+            padding: 0.75rem 1.25rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: var(--success);
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: var(--danger);
+        }
+        
+        .progress-container {
+            margin: 2rem 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent);
+            width: 65%;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">Pi Staking</div>
+        <div class="nav-links">
+            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <a href="#"><i class="fas fa-chart-line"></i> Stats</a>
+            <a href="#"><i class="fas fa-user"></i> Account</a>
+            <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-coins"></i> Stake PI</a></li>
+                    <li><a href="#"><i class="fas fa-history"></i> Staking History</a></li>
+                    <li><a href="#"><i class="fas fa-wallet"></i> Withdraw</a></li>
+                    <li><a href="#"><i class="fas fa-gift"></i> Rewards</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <h1>Stake PI Tokens</h1>
+                <p>Stake your PI tokens to earn rewards. Minimum stake: 10 PI, Maximum stake: 100 PI</p>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Staked</div>
+                        <div class="stat-value">542 PI</div>
+                        <div class="stat-label">Across all users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Your Staked</div>
+                        <div class="stat-value">50 PI</div>
+                        <div class="stat-label">Currently staked</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Your Rewards</div>
+                        <div class="stat-value">12.5 PI</div>
+                        <div class="stat-label">Available to claim</div>
+                    </div>
+                </div>
+
+                <!-- Stake Form -->
+                <div class="card">
+                    <div class="card-header">New Stake</div>
+                    <form id="stakeForm">
+                        <div class="form-group">
+                            <label for="amount">Amount to Stake (PI)</label>
+                            <input type="number" id="amount" min="10" max="100" placeholder="Enter amount between 10-100 PI" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="duration">Staking Duration (Days)</label>
+                            <select id="duration" required>
+                                <option value="">Select duration</option>
+                                <option value="11">11 Days</option>
+                                <option value="15">15 Days</option>
+                                <option value="20">20 Days</option>
+                                <option value="25">25 Days</option>
+                                <option value="31">31 Days</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="senderAddress">Your Pi Wallet Address</label>
+                            <input type="text" id="senderAddress" placeholder="Enter your Pi wallet address" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Deposit Address</label>
+                            <input type="text" value="GCKKMAVHVDGMKYYZMSXSDWAL2RP4EB73APEQPZ63KIY2TWZL7MLWYBCA" readonly>
+                            <small>Send your PI to this address to complete the staking process</small>
+                        </div>
+                        
+                        <div class="alert alert-danger" id="errorMessage" style="display: none;">
+                            <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
+                        </div>
+                        
+                        <button type="submit" class="btn-accent">Confirm Stake</button>
+                    </form>
+                </div>
+
+                <!-- Current Stakes -->
+                <div class="card">
+                    <div class="card-header">Your Active Stakes</div>
+                    <table class="stake-history">
+                        <thead>
+                            <tr>
+                                <th>Amount</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                                <th>Estimated Reward</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>30 PI</td>
+                                <td>2023-05-15</td>
+                                <td>2023-06-15</td>
+                                <td>31 days</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>7.5 PI</td>
+                            </tr>
+                            <tr>
+                                <td>20 PI</td>
+                                <td>2023-05-20</td>
+                                <td>2023-06-10</td>
+                                <td>20 days</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>4 PI</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Reward Progress -->
+                <div class="card">
+                    <div class="card-header">Reward Progress</div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>Staked: 50 PI</span>
+                            <span>Rewards: 12.5 PI</span>
+                        </div>
+                    </div>
+                    <button class="btn-accent" style="width: 100%;">Withdraw Rewards</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('stakeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('amount').value);
+            const duration = document.getElementById('duration').value;
+            const senderAddress = document.getElementById('senderAddress').value.trim();
+            
+            const errorElement = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            // Validation
+            if (isNaN(amount) || amount < 10 || amount > 100) {
+                errorText.textContent = 'Please enter a valid amount between 10 and 100 PI';
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            if (!duration) {
+                errorText.textContent = 'Please select a staking duration';
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            if (!senderAddress) {
+                errorText.textContent = 'Please enter your Pi wallet address';
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            // If validation passes
+            errorElement.style.display = 'none';
+            
+            // Here you would typically send this data to your backend
+            // For this demo, we'll just show an alert
+            alert(`Staking request received:\nAmount: ${amount} PI\nDuration: ${duration} days\nSender: ${senderAddress}\n\nPlease send ${amount} PI to the deposit address to complete your stake.`);
+            
+            // Reset form
+            this.reset();
+        });
+    </script>
+</body>
+</html>
